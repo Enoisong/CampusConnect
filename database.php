@@ -8,6 +8,6 @@ $dbName = "CampusConnect";
 $conn = pg_connect("host=$hostName dbname=$dbName user=$dbUser password=$dbPassword");
 
 if (!$conn) {
-    die("Connection failed: " . pg_last_error());
+    die("Something went wrong;");
 }
 ?>
