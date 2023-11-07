@@ -10,38 +10,45 @@
 </head>
 <body>
     <div class="container">
-        <?php
-        if(isset($_POST["submit"])){
-            $fullName = $_POST["fullname"];
-            $email = $_POST["email"];
-            $password = $_POST["password"];
-            $passwordRepeat = $_POST["repeat_password"];
-            
-            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-            $errors = array();
-            
-            if (empty($fullName) || empty($email) || empty($password) || empty($passwordRepeat)){
-                array_push($errors, "All fields are required");
-            }
-            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                array_push($errors, "Email is not valid");
-            }
-            if (strlen($password) < 8){
-                array_push($errors, "Password must be at least 8 characters long");
-            }
-            if($password !== $passwordRepeat){
-                array_push($errors, "Password does not match");
-            }
-            if(count($errors) > 0){
-                foreach($errors as $error){
-                    echo "<div class='alert alert-danger'>$error</div>";
-                }
-            } else {
-                // The data will be inserted into the database.
-                // You need to add database code here.
-            }
+    <?php
+if (isset($_POST["submit"])) {
+    $fullName = $_POST["fullname"];
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+    $passwordRepeat = $_POST["repeat_password"];
+
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+    $errors = array();
+
+    if (empty($fullName) || empty($email) || empty($password) || empty($passwordRepeat)) {
+        array_push($errors, "All fields are required");
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        array_push($errors, "Email is not valid");
+    }
+    if (strlen($password) < 8) {
+        array_push($errors, "Password must be at least 8 characters long");
+    }
+    if ($password !== $passwordRepeat) {
+        array_push($errors, "Password does not match");
+    }
+    if (count($errors) > 0) {
+        foreach ($errors as $error) {
+            echo "<div class='alert alert-danger'>$error</div>";
         }
-        ?>
+    } else {
+        // Add the debugging statement here
+        if (function_exists('pg_connect')) {
+            echo 'pg_connect is available.';
+        } else {
+            echo 'pg_connect is not available.';
+        }
+    
+        require_once "database.php"; // This line is correctly placed within the else block
+    }
+}
+?>
+
         <form action="registration.php" method="post">
             <div class="form-group">
                 <input type="text" class="form-control" name="fullname" placeholder="Fullname">
